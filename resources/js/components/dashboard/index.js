@@ -8,6 +8,7 @@ import ChangePassword from '../change-password'
 import { connect } from 'react-redux'
 import { handleGetAuthUser } from '../../actions/users/Actions'
 import { Spin } from 'antd'
+import Events from '../events'
 
 const Dashboard = (props) => {
   const [loading, setLoading] = useState(true)
@@ -29,6 +30,7 @@ const Dashboard = (props) => {
                           : <Switch>
                                 <Route path={['/', '/home']} exact component={Overview}/>
                                 <Route path={'/users'} exact component={Users}/>
+                                <Route path={'/events'} exact component={Events}/>
                                 <Route path={'/password/change'} exact component={ChangePassword}/>
                             </Switch>
                     }

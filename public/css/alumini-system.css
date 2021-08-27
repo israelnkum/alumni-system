@@ -11,10 +11,9 @@
 }
 
 .logo {
-  height: 32px;
-  margin: 16px;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.3);
+  background: #ffffff;
+  height: 64px;
 }
 
 .site-layout .site-layout-background {

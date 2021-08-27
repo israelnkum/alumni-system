@@ -7,9 +7,10 @@ import {
 } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import EventForm from '../events/event-form'
 
 const AppSideBar = (props) => {
-  const rootSubmenuKeys = ['students', 'users', 'staff']
+  const rootSubmenuKeys = ['events', 'users', 'jobs', 'forums']
   const [openKeys, setOpenKeys] = useState([])
 
   const onOpenChange = keys => {
@@ -27,22 +28,25 @@ const AppSideBar = (props) => {
           position: 'fixed',
           left: 0
         }} trigger={null} collapsible collapsed={props.collapsed}>
-            <div align={'center'}>
-                <img style={{ marginTop: 20 }} height={'auto'} width={100} alt={'ALumini System'} src={'/imgs/logo.jpeg'}/>
+            <div className={'logo'} align={'center'}>
+                <img height={'auto'} width={120} alt={'Alumni System'} src={'/imgs/logo.png'}/>
             </div>
             <Divider/>
             <Menu disabled={!props.passwordUpdated} theme="dark" mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} defaultSelectedKeys={['1']}>
                 <Menu.Item key="home" icon={<VideoCameraOutlined />}>
                     <Link to={'/home'}>Home</Link>
                 </Menu.Item>
-                <Menu.SubMenu key="students" icon={<UserOutlined />} title="Students">
-                    <Menu.Item key="all-students">
-                        <Link to={'/students'}>All Students</Link>
+                <Menu.SubMenu key="events" icon={<UserOutlined />} title="Events">
+                    <Menu.Item key="new-event">
+                        <EventForm type={'text'}/>
+                    </Menu.Item>
+                    <Menu.Item key="all-events">
+                        <Link to={'/events'}>All Events</Link>
                     </Menu.Item>
                 </Menu.SubMenu>
-                <Menu.SubMenu key="staff" icon={<UserOutlined />} title="Staff">
-                    <Menu.Item key="all-staff">
-                        <Link to={'/staff'}>All Staff</Link>
+                <Menu.SubMenu key="jobs" icon={<UserOutlined />} title="Jobs">
+                    <Menu.Item key="all-jobs">
+                        <Link to={'/jobs'}>All Jobs</Link>
                     </Menu.Item>
                 </Menu.SubMenu>
                 <Menu.SubMenu key="users" icon={<UserOutlined />} title="Users">
