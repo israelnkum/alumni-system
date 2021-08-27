@@ -106,7 +106,7 @@ class EventController extends Controller
         try {
             Event::query()->find($id)->delete();
             DB::commit();
-            return \response('Student Deleted');
+            return \response('Event Deleted');
         }catch (\Exception $exception){
             DB::rollBack();
             return response('Something went wrong',422);

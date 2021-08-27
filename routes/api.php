@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlumniJobController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::apiResource('events', EventController::class);
+    Route::apiResource('jobs', AlumniJobController::class);
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

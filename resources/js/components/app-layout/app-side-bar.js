@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import EventForm from '../events/event-form'
+import JobForm from '../jobs/job-form'
 
 const AppSideBar = (props) => {
   const rootSubmenuKeys = ['events', 'users', 'jobs', 'forums']
@@ -45,6 +46,9 @@ const AppSideBar = (props) => {
                     </Menu.Item>
                 </Menu.SubMenu>
                 <Menu.SubMenu key="jobs" icon={<UserOutlined />} title="Jobs">
+                    <Menu.Item key="new-job">
+                        <JobForm type={'text'}/>
+                    </Menu.Item>
                     <Menu.Item key="all-jobs">
                         <Link to={'/jobs'}>All Jobs</Link>
                     </Menu.Item>
