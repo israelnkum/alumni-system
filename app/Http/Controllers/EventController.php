@@ -28,7 +28,7 @@ class EventController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
 
         // check if name is already taken

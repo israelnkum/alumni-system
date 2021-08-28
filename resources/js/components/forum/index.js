@@ -1,18 +1,15 @@
 import React from 'react'
-import EventForm from './event-form'
-import AllEvents from './all-events'
-import { Divider } from 'antd'
+import AllTopics from './all-topics'
 import AppPageHeader from '../app-layout/app-page-header'
+import TopicForm from './topic-form'
 
-const Events = () => {
+const Forum = () => {
   return (
         <React.Fragment>
-            <AppPageHeader title={'Events'} extras={[
-                <EventForm key={'1'}/>
-            ]}/>
-            <Divider/>
-            <AllEvents/>
+            <AppPageHeader title={'Forum'}/>
+            <TopicForm key={1}/>
+            <AllTopics/>
         </React.Fragment>
   )
 }
-export default Events
+export default Forum

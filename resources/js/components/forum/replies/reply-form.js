@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { Form, Button, Col, Row, Input, message, Spin } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
-import { handleAddNewTopic, handleUpdateTopic } from '../../actions/forum/Actions'
+import { handleAddNewTopic, handleUpdateTopic } from '../../../actions/forum/Actions'
 
-const TopicForm = (props) => {
+const ReplyForm = (props) => {
   const { addTopic, updateTopic, initialValues } = props
   const [add, setAdding] = useState(false)
   const [form] = Form.useForm()
@@ -29,45 +29,40 @@ const TopicForm = (props) => {
   }
 
   return (
-      <Spin spinning={add} tip={'Adding'}>
-          <Form form={form} layout="vertical"
-                style={{ marginTop: 20 }}
-                initialValues={initialValues}
-                hideRequiredMark onFinish={onFinish}>
-              <Row justify={'center'}>
-                  <Col span={16}>
-                      <div align={'right'}>
-                          <Button loading={add} htmlType={'submit'} type="primary">
-                              Add
-                          </Button>
-                      </div>
-                      <Form.Item
-                          name="title"
-                          rules={[{ required: true, message: 'Please enter topic' }]}
-                      >
-                          <Input.TextArea placeholder={'Add a topic'}/>
-                      </Form.Item>
-                      <Form.Item
-                          label="ID"
-                          name="id"
-                          hidden
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Required'
-                            }
-                          ]}
-                      >
-                          <Input />
-                      </Form.Item>
-                  </Col>
-              </Row>
-          </Form>
-      </Spin>
+
+        <Spin spinning={add} tip={'Adding'}>
+            <Form form={form} layout="vertical" style={{ width: 600 }}
+                  initialValues={initialValues}
+                  hideRequiredMark onFinish={onFinish}>
+                <Form.Item
+                    name="title"
+                    rules={[{ required: true, message: 'Please enter topic' }]}
+                >
+                    <Input.TextArea placeholder={'Add a reply'}/>
+                </Form.Item>
+                <Form.Item
+                    label="ID"
+                    name="id"
+                    hidden
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Required'
+                      }
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Button size={'small'} loading={add} htmlType={'submit'} type="primary">
+                    Reply
+                </Button>
+            </Form>
+        </Spin>
   )
 }
 
-TopicForm.propTypes = {
+ReplyForm.propTypes = {
   addTopic: PropTypes.func.isRequired,
   updateTopic: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
@@ -75,7 +70,7 @@ TopicForm.propTypes = {
   type: PropTypes.string
 }
 
-TopicForm.defaultProps = {
+ReplyForm.defaultProps = {
   initialValues: { id: 0 },
   btnIcon: <React.Fragment><PlusOutlined /> New Topic</React.Fragment>,
   type: 'button'
@@ -93,4 +88,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopicForm)
+export default connect(mapStateToProps, mapDispatchToProps)(ReplyForm)

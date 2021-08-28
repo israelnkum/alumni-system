@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Button, Col, Row, Input, message, Spin, DatePicker } from 'antd'
+import { Form, Button, Col, Row, Input, message, Spin } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
-import { handleAddNewEvent, handleUpdateEvent } from '../../actions/events/Actions'
+import { handleAddNewTopic, handleUpdateTopic } from '../../actions/forum/Actions'
 
-const EventForm = (props) => {
-  const { addEvent, updateEvent, initialValues } = props
+const TopicForm = (props) => {
+  const { addTopic, updateTopic, initialValues } = props
   const [add, setAdding] = useState(false)
   const [form] = Form.useForm()
 
@@ -17,10 +17,10 @@ const EventForm = (props) => {
     for (const key in values) {
       if (Object.prototype.hasOwnProperty.call(values, key)) { formData.append(key, values[key]) }
     }
-    (values.id === 0 ? addEvent(formData) : updateEvent(formData))
+    (values.id === 0 ? addTopic(formData) : updateTopic(formData))
       .then(() => {
         setAdding(false)
-        message.success('Event ' + (values.id === 0 ? 'Added' : 'Updated'))
+        message.success('Topic ' + (values.id === 0 ? 'Added' : 'Updated'))
         form.resetFields()
       }).catch((error) => {
         setAdding(false)
@@ -31,16 +31,21 @@ const EventForm = (props) => {
   return (
       <Spin spinning={add} tip={'Adding'}>
           <Form form={form} layout="vertical"
+                style={{ marginTop: 20 }}
                 initialValues={initialValues}
                 hideRequiredMark onFinish={onFinish}>
-              <Row gutter={16}>
-                  <Col span={24}>
+              <Row justify={'center'}>
+                  <Col span={16}>
+                      <div align={'right'}>
+                          <Button loading={add} htmlType={'submit'} type="primary">
+                              Add
+                          </Button>
+                      </div>
                       <Form.Item
-                          name="name"
-                          label="Event Name"
-                          rules={[{ required: true, message: 'Please enter event name' }]}
+                          name="title"
+                          rules={[{ required: true, message: 'Please enter topic' }]}
                       >
-                          <Input />
+                          <Input.TextArea placeholder={'Add a topic'}/>
                       </Form.Item>
                       <Form.Item
                           label="ID"
@@ -56,28 +61,23 @@ const EventForm = (props) => {
                           <Input />
                       </Form.Item>
                   </Col>
-                  <Col span={24}>
-                      <Button loading={add} htmlType={'submit'} type="primary">
-                          Submit
-                      </Button>
-                  </Col>
               </Row>
           </Form>
       </Spin>
   )
 }
 
-EventForm.propTypes = {
-  addEvent: PropTypes.func.isRequired,
-  updateEvent: PropTypes.func.isRequired,
+TopicForm.propTypes = {
+  addTopic: PropTypes.func.isRequired,
+  updateTopic: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   btnIcon: PropTypes.node,
   type: PropTypes.string
 }
 
-EventForm.defaultProps = {
+TopicForm.defaultProps = {
   initialValues: { id: 0 },
-  btnIcon: <React.Fragment><PlusOutlined /> New Event</React.Fragment>,
+  btnIcon: <React.Fragment><PlusOutlined /> New Topic</React.Fragment>,
   type: 'button'
 }
 
@@ -88,9 +88,9 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    addEvent: (payload) => dispatch(handleAddNewEvent(payload)),
-    updateEvent: (payload) => dispatch(handleUpdateEvent(payload))
+    addTopic: (payload) => dispatch(handleAddNewTopic(payload)),
+    updateTopic: (payload) => dispatch(handleUpdateTopic(payload))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventForm)
+export default connect(mapStateToProps, mapDispatchToProps)(TopicForm)

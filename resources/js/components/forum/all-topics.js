@@ -1,78 +1,91 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import { Button, message, Popconfirm, Space, Table } from 'antd'
-import { connect } from 'react-redux'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import StaffForm from './event-form'
-import { handleDeleteEvent, handleGetAllEvent } from '../../actions/events/Actions'
+import { List, message, Avatar, Spin, Card, Space } from 'antd'
 
-const { Column } = Table
-function AllEvents (props) {
-  const [loading, setLoading] = useState()
-  const { events, getAllEvents, deleteEvent } = props
+import InfiniteScroll from 'react-infinite-scroller'
+import { handleDeleteTopic, handleGetAllTopics } from '../../actions/forum/Actions'
+import { connect } from 'react-redux'
+import { EditOutlined } from '@ant-design/icons'
+import TopicForm from './topic-form'
+import { Link } from 'react-router-dom'
+
+const AllTopics = (props) => {
+  const { getAllTopics, topics } = props
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
+
   useEffect(() => {
-    setLoading(true)
-    getAllEvents().then(() => {
-      setLoading(false)
-    })
+    fetchData()
   }, [])
 
-  const handleDelete = (id) => {
-    setLoading(true)
-    deleteEvent(id).then(() => {
-      message.success('event Deleted')
-      setLoading(false)
-    }).catch((error) => {
-      message.warning(error.response.data)
+  const fetchData = () => {
+    getAllTopics().then(() => {
       setLoading(false)
     })
   }
+
+  const handleInfiniteOnLoad = () => {
+    setLoading(true)
+    if (topics.length > 14) {
+      message.warning('Infinite List loaded all')
+      setHasMore(false)
+      setLoading(false)
+      return
+    }
+    fetchData()
+  }
+
   return (
-        <Table loading={loading} dataSource={events} scroll={{ x: 50 }} rowKey={'id'}>
-            <Column title="Name" dataIndex="name"/>
-            <Column title="Start Date" dataIndex="startDate"/>
-            <Column title="End Date" dataIndex="endDate"/>
-            <Column title="Description" dataIndex="description"/>
-            <Column
-                title="Action"
-                render={(text, record) => (
-                    <Space>
-                        <StaffForm initialValues={{
-                          ...record,
-                          startDateAndTime: [
-                            moment(record.startDate, 'YYYY-MM-DD hh:mm A'),
-                            moment(record.endDate, 'YYYY-MM-DD hh:mm A')
-                          ]
-                        }} btnIcon={<EditOutlined />}/>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => { handleDelete(record.id) }} cancelText={'No'} okText={'Yes'}>
-                            <Button size={'small'} danger icon={<DeleteOutlined/>}/>
-                        </Popconfirm>
-                    </Space>
-                )}
-            />
-        </Table>
+      <List
+          pagination={{
+            pageSize: 10
+          }}
+          grid={{ gutter: 16, column: 1 }}
+          dataSource={topics}
+          renderItem={item => (
+              <List.Item
+                  key={item.id}>
+                  <Card size={'small'} title={moment(item.created_at).format('ddd, Do hA')} extra={[
+                      <EditOutlined key={'edit'}/>
+                  ]}>
+                      <Card.Meta
+                          avatar={
+                              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                          }
+                          title={<Link to={`/forum/${item.title}/${item.id}`}>{item.title}</Link>}
+                          description={
+                              <Space>
+                                  {'Author: ' + item.author}
+                                  {item.comments + ' comments'}
+                              </Space>
+                          }
+                      />
+                  </Card>
+              </List.Item>
+          )}
+      >
+      </List>
   )
 }
-
-AllEvents.propTypes = {
-  events: PropTypes.array.isRequired,
-  getAllEvents: PropTypes.func.isRequired,
-  deleteEvent: PropTypes.func.isRequired
+AllTopics.propTypes = {
+  topics: PropTypes.array.isRequired,
+  getAllTopics: PropTypes.func.isRequired,
+  deleteTopic: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    events: state.EventsReducer.events
+    topics: state.TopicsReducer.topics
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllEvents: () => dispatch(handleGetAllEvent()),
-    deleteEvent: (id) => dispatch(handleDeleteEvent(id))
+    getAllTopics: () => dispatch(handleGetAllTopics()),
+    deleteTopic: (id) => dispatch(handleDeleteTopic(id))
 
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllEvents)
+export default connect(mapStateToProps, mapDispatchToProps)(AllTopics)

@@ -1,29 +1,36 @@
 import { Types } from './Types'
 
-export function addNewEvent (payload) {
+export function addNewTopic (payload) {
   return {
-    type: Types.ADD_EVENT,
+    type: Types.ADD_TOPIC,
     payload
   }
 }
 
-export function getAllEvents (payload) {
+export function getAllTopics (payload) {
   return {
-    type: Types.GET_ALL_EVENTS,
+    type: Types.GET_ALL_TOPICS,
     payload
   }
 }
 
-export function deleteEvent (id) {
+export function deleteTopic (id) {
   return {
-    type: Types.DELETE_EVENT,
+    type: Types.DELETE_TOPIC,
     id
   }
 }
 
-export function updateEvent (payload) {
+export function updateTopic (payload) {
   return {
-    type: Types.UPDATE_EVENT,
+    type: Types.UPDATE_TOPIC,
+    payload
+  }
+}
+
+export function topicDetail (payload) {
+  return {
+    type: Types.TOPIC_DETAIL,
     payload
   }
 }

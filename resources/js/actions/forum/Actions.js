@@ -1,11 +1,11 @@
 import api from '../../utils/api'
-import { addNewEvent, deleteEvent, getAllEvents, updateEvent } from './ActionCreators'
+import { addNewTopic, deleteTopic, getAllTopics, topicDetail, updateTopic } from './ActionCreators'
 
-// Add new Event
-export const handleAddNewEvent = (payload) => (dispatch) => {
+// Add new Topic
+export const handleAddNewTopic = (payload) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    api().post('/events', payload).then((res) => {
-      dispatch(addNewEvent(res.data))
+    api().post('/forum/topics', payload).then((res) => {
+      dispatch(addNewTopic(res.data))
       resolve(res)
     }).catch((err) => {
       reject(err)
@@ -13,11 +13,11 @@ export const handleAddNewEvent = (payload) => (dispatch) => {
   })
 }
 
-// Get all Event
-export const handleGetAllEvent = () => (dispatch) => {
+// Get all Topic
+export const handleGetAllTopics = () => (dispatch) => {
   return new Promise((resolve, reject) => {
-    api().get('/events').then((res) => {
-      dispatch(getAllEvents(res.data))
+    api().get('/forum/topics').then((res) => {
+      dispatch(getAllTopics(res.data))
       resolve(res)
     }).catch((err) => {
       reject(err)
@@ -25,11 +25,11 @@ export const handleGetAllEvent = () => (dispatch) => {
   })
 }
 
-// Delete Event
-export const handleDeleteEvent = (id) => (dispatch) => {
+// Delete Topic
+export const handleDeleteTopic = (id) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    api().delete(`/events/${id}`).then((res) => {
-      dispatch(deleteEvent(id))
+    api().delete(`/forum/topics/${id}`).then((res) => {
+      dispatch(deleteTopic(id))
       resolve(res)
     }).catch((err) => {
       reject(err)
@@ -37,11 +37,23 @@ export const handleDeleteEvent = (id) => (dispatch) => {
   })
 }
 
-// Update Event
-export const handleUpdateEvent = (values) => (dispatch) => {
+// Update Topic
+export const handleUpdateTopic = (values) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    api().post(`/events/${values.get('id')}`, values).then((res) => {
-      dispatch(updateEvent(res.data))
+    api().post(`/forum/topics/${values.get('id')}`, values).then((res) => {
+      dispatch(updateTopic(res.data))
+      resolve(res)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+// Update Topic
+export const handleTopicDetail = (topicId) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    api().get(`/forum/topics/${topicId}`).then((res) => {
+      dispatch(topicDetail(res.data))
       resolve(res)
     }).catch((err) => {
       reject(err)

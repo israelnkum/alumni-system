@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlumniJobController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,9 +26,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/change-password',[UserController::class, 'changePassword']);
     });
 
+    // events api
     Route::apiResource('events', EventController::class);
+
+    // jobs api
     Route::apiResource('jobs', AlumniJobController::class);
+
+    // Forum api
+    Route::prefix('forum')->group(function (){
+        Route::apiResource('/topics', TopicController::class);
+    });
 });
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

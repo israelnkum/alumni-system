@@ -10,6 +10,8 @@ import { handleGetAuthUser } from '../../actions/users/Actions'
 import { Spin } from 'antd'
 import Events from '../events'
 import Jobs from '../jobs'
+import Forum from '../forum'
+import TopicDetail from '../forum/topic-detail'
 
 const Dashboard = (props) => {
   const [loading, setLoading] = useState(true)
@@ -33,6 +35,8 @@ const Dashboard = (props) => {
                                 <Route path={'/users'} exact component={Users}/>
                                 <Route path={'/events'} exact component={Events}/>
                                 <Route path={'/jobs'} exact component={Jobs}/>
+                                <Route path={'/forum'} exact component={Forum}/>
+                                <Route path={'/forum/:topicName/:topicId'} exact component={TopicDetail}/>
                                 <Route path={'/password/change'} exact component={ChangePassword}/>
                             </Switch>
                     }

@@ -37,6 +37,9 @@ const AppSideBar = (props) => {
                 <Menu.Item key="home" icon={<VideoCameraOutlined />}>
                     <Link to={'/home'}>Home</Link>
                 </Menu.Item>
+                <Menu.Item key="forum" icon={<VideoCameraOutlined />}>
+                    <Link to={'/forum'}>Forum</Link>
+                </Menu.Item>
                 <Menu.SubMenu key="events" icon={<UserOutlined />} title="Events">
                     <Menu.Item key="new-event">
                         <EventForm type={'text'}/>

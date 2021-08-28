@@ -36,3 +36,24 @@
 .ck-editor__editable {
   min-height: 500px !important;
 }
+
+.demo-infinite-container {
+  height: 300px;
+  padding: 8px 24px;
+  overflow: auto;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.demo-loading-container {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+.replyHeader > .ant-collapse-header {
+  padding: 0 !important;
+  margin-top: 0 !important;
+  color: #818181 !important;
+}

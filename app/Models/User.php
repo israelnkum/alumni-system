@@ -12,6 +12,13 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $appends = [
+        'name'
+    ];
+
+    public function getFullNameAttribute(){
+        return $this->name;
+    }
     /**
      * The attributes that are mass assignable.
      *

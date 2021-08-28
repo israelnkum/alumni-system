@@ -1,37 +1,43 @@
-import { Types } from '../actions/events/Types'
+import { Types } from '../actions/forum/Types'
 const initialState = {
-  events: []
+  topics: [],
+  topicDetail: {}
 }
 
-const EventsReducer = (state = initialState, action) => {
+const ForumReducer = (state = initialState, action) => {
   switch (action.type) {
-    case Types.GET_ALL_EVENTS:
+    case Types.GET_ALL_TOPICS:
       return {
-        ...state, events: action.payload
+        ...state, topics: action.payload
       }
 
-    case Types.ADD_EVENT:
+    case Types.TOPIC_DETAIL:
       return {
-        ...state,
-        events: state.events.concat(action.payload)
+        ...state, topicDetail: action.payload
       }
 
-    case Types.UPDATE_EVENT:
+    case Types.ADD_TOPIC:
       return {
         ...state,
-        events: state.events.map((event) => {
-          return event.id === action.payload.id ? action.payload : event
+        topics: state.topics.concat(action.payload)
+      }
+
+    case Types.UPDATE_TOPIC:
+      return {
+        ...state,
+        topics: state.topics.map((topic) => {
+          return topic.id === action.payload.id ? action.payload : topic
         })
       }
 
-    case Types.DELETE_EVENT:
+    case Types.DELETE_TOPIC:
       return {
         ...state,
-        events: state.events.filter((event) => event.id !== action.id)
+        topics: state.topics.filter((topic) => topic.id !== action.id)
       }
 
     default:
       return state
   }
 }
-export default EventsReducer
+export default ForumReducer

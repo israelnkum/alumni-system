@@ -1,63 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Avatar, Comment, Spin } from 'antd'
-import { connect } from 'react-redux'
-import { handleTopicDetail } from '../../actions/forum/Actions'
-import { useParams } from 'react-router'
+import { Avatar, Comment } from 'antd'
+import ReplyComment from '../replies/reply-comment'
 
-const TopicDetail = (props) => {
-  const [loading, setLoading] = useState(true)
-  const { children, topicDetail, getTopicDetail } = props
-  const { topicId } = useParams()
-
-  useEffect(() => {
-    getTopicDetail(topicId).then(() => {
-      setLoading(false)
-    })
-  }, [])
-
+const Comments = (props) => {
+  const { topic, author } = props
   return (
-      <Spin spinning={loading}>
-          {
-              topicDetail &&
-              <Comment
-                  actions={[<span key="comment-nested-reply-to">Reply to</span>]}
-                  author={<a>Han Solo</a>}
-                  avatar={
-                      <Avatar
-                          src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                          alt="Han Solo"
-                      />
-                  }
-                  content={
-                      <p>
-                          We supply a series of design principles, practical patterns and high quality design
-                          resources (Sketch and Axure).
-                      </p>
-                  }
-              >
-                  {children}
-              </Comment>
+      <Comment
+          actions={[
+              <ReplyComment key="comment-nested-reply-to"/>
+              // <span key="comment-nested-reply-to">Reply to</span>
+          ]}
+          author={<a>{author}</a>}
+          avatar={
+              <Avatar
+                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  alt="Han Solo"
+              />
           }
-      </Spin>
+          content={
+              <p>
+                  {topic}
+              </p>
+          }
+      >
+          {props.children}
+      </Comment>
   )
 }
-TopicDetail.propTypes = {
+Comments.propTypes = {
   children: PropTypes.node,
-  topicDetail: PropTypes.object.isRequired,
-  getTopicDetail: PropTypes.func.isRequired
+  topic: PropTypes.string,
+  author: PropTypes.string
 }
 
-const mapStateToProps = (state) => {
-  return {
-    topicDetail: state.TopicsReducer.topicDetail
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getTopicDetail: (id) => dispatch(handleTopicDetail(id))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopicDetail)
+export default Comments
