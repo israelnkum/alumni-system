@@ -16,11 +16,12 @@ const AppAvatar = () => {
                 <div align={'center'}>
                     <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
                     <br/>
-                    <Typography.Text>Amos Appiah Nkum</Typography.Text>
+                    <Typography.Text>Tracy Sarah</Typography.Text>
                     <br/>
-                    NMTC/2021/006/2252
+                    0718000075
                 </div>
             </Card>
+
         </React.Fragment>
   )
   return (
@@ -28,7 +29,7 @@ const AppAvatar = () => {
             overlay={menu}
         >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                Hi Amos Appiah&nbsp;<DownOutlined />
+                Hi Tracy &nbsp;<DownOutlined />
             </a>
         </Dropdown>
   )

@@ -55,3 +55,26 @@
     margin-top: 0 !important;
     color: #818181 !important;
 }
+.overviewCard1 {
+    border-radius: 10px !important;
+}
+.overviewCard1 .ant-card-body .ant-typography {
+    font-size: 13px !important;
+    line-height: 1.2;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+.dashIconTitle{
+    font-size: 30px !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    font-weight: lighter !important;
+}
+.dashIconText{
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+}
+.dashIcon {
+    font-size: 30px !important;
+    color: #00317c !important;
+}

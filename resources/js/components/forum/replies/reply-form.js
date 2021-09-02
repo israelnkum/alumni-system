@@ -1,26 +1,27 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Button, Col, Row, Input, message, Spin } from 'antd'
+import { Form, Button, Input, message, Spin } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
-import { handleAddNewTopic, handleUpdateTopic } from '../../../actions/forum/Actions'
+import { handleAddComment } from '../../../actions/forum/Actions'
 
 const ReplyForm = (props) => {
-  const { addTopic, updateTopic, initialValues } = props
+  const { addComment, initialValues, commentType } = props
   const [add, setAdding] = useState(false)
   const [form] = Form.useForm()
 
   const onFinish = (values) => {
     setAdding(true)
     const formData = new FormData()
+    formData.append('type', commentType)
     values.id !== 0 && formData.append('_method', 'PUT')
     for (const key in values) {
       if (Object.prototype.hasOwnProperty.call(values, key)) { formData.append(key, values[key]) }
     }
-    (values.id === 0 ? addTopic(formData) : updateTopic(formData))
+    (values.id === 0 ? addComment(formData) : addComment(formData))
       .then(() => {
         setAdding(false)
-        message.success('Topic ' + (values.id === 0 ? 'Added' : 'Updated'))
+        message.success('Comment ' + (values.id === 0 ? 'Added' : 'Updated'))
         form.resetFields()
       }).catch((error) => {
         setAdding(false)
@@ -35,7 +36,7 @@ const ReplyForm = (props) => {
                   initialValues={initialValues}
                   hideRequiredMark onFinish={onFinish}>
                 <Form.Item
-                    name="title"
+                    name="text"
                     rules={[{ required: true, message: 'Please enter topic' }]}
                 >
                     <Input.TextArea placeholder={'Add a reply'}/>
@@ -43,6 +44,19 @@ const ReplyForm = (props) => {
                 <Form.Item
                     label="ID"
                     name="id"
+                    hidden
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Required'
+                      }
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Replying to"
+                    name="replyingToId"
                     hidden
                     rules={[
                       {
@@ -63,11 +77,11 @@ const ReplyForm = (props) => {
 }
 
 ReplyForm.propTypes = {
-  addTopic: PropTypes.func.isRequired,
-  updateTopic: PropTypes.func.isRequired,
+  addComment: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   btnIcon: PropTypes.node,
-  type: PropTypes.string
+  type: PropTypes.string,
+  commentType: PropTypes.string.isRequired
 }
 
 ReplyForm.defaultProps = {
@@ -83,8 +97,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTopic: (payload) => dispatch(handleAddNewTopic(payload)),
-    updateTopic: (payload) => dispatch(handleUpdateTopic(payload))
+    addComment: (payload) => dispatch(handleAddComment(payload))
   }
 }
 

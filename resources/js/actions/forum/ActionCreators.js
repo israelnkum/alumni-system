@@ -34,3 +34,10 @@ export function topicDetail (payload) {
     payload
   }
 }
+
+export function addComment (payload) {
+  return {
+    type: Types.ADD_COMMENT,
+    payload
+  }
+}

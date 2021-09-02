@@ -21,9 +21,20 @@ const TopicDetail = (props) => {
       <Spin spinning={loading}>
           {
               topicDetail &&
-              <Comments topic={topicDetail.title} author={topicDetail.author}>
-
+              <Comments header={'Add Comment'} replyingToId={parseInt(topicId)} topic={topicDetail.title} author={topicDetail.author}>
+                  {
+                      topicDetail.comments.map((comment) => (
+                          <Comments commentOrReply={'reply'} header={'Reply'} key={comment.id} replyingToId={comment.id} topic={comment.text} author={comment.author.name}>
+                              {
+                                  comment.replies && comment.replies.map((reply) => (
+                                      <Comments key={reply.id} header={'Reply'} replyingToId={reply.id} topic={reply.text} author={'osikani'}/>
+                                  ))
+                              }
+                          </Comments>
+                      ))
+                  }
               </Comments>
+
           }
       </Spin>
   )

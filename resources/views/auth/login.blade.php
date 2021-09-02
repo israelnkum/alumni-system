@@ -27,7 +27,7 @@
 {{--            </div>--}}
             <div class="card login-card p-2">
                 <div class="card-header border-primary p-1 bg-white text-center header-text">
-                    <h3>Alumini System</h3>
+                    <h3>Alumni System</h3>
                     <h6>login</h6>
                 </div>
                 <div class="card-body">

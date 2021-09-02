@@ -60,3 +60,15 @@ export const handleTopicDetail = (topicId) => (dispatch) => {
     })
   })
 }
+
+// add comment
+export const handleAddComment = (data) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    api().post('/forum/comments/add', data).then((res) => {
+      dispatch(topicDetail(res.data))
+      resolve(res)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}

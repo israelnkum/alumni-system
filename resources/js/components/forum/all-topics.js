@@ -57,7 +57,7 @@ const AllTopics = (props) => {
                           description={
                               <Space>
                                   {'Author: ' + item.author}
-                                  {item.comments + ' comments'}
+                                  {item.comment_count + ' comments'}
                               </Space>
                           }
                       />

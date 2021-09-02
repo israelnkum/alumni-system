@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TopicResource;
+use App\Models\Comment;
 use App\Models\Topic;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -41,7 +45,7 @@ class TopicController extends Controller
 
             DB::commit();
             return response(new TopicResource($event));
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return response($exception,400);
         }
@@ -79,5 +83,37 @@ class TopicController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Response|ResponseFactory
+     */
+    public function addComment(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            if ($request->type == 'reply'){
+                $comment = Comment::find($request->replyingToId);
+                $comment->replies()->create([
+                    'text' => $request->text,
+                    'authorId' => Auth::user()->id
+                ]);
+                DB::commit();
+                return response(new TopicResource(Topic::find($comment->topicId)));
+            }{
+                $topic = Topic::find($request->replyingToId);
+                $topic->comments()->create([
+                    'text' => $request->text,
+                    'authorId' => Auth::user()->id
+                ]);
+                DB::commit();
+                return response(new TopicResource($topic));
+            }
+
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response($exception,400);
+        }
     }
 }

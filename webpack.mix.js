@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require('laravel-mix')
 
 /*
  |--------------------------------------------------------------------------
@@ -12,6 +12,11 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/alumini-system.scss', 'public/css')
-    .sourceMaps();
+  .sass('resources/sass/app.scss', 'public/css')
+  .sass('resources/sass/alumini-system.scss', 'public/css')
+  .sourceMaps()
+mix.browserSync('127.0.0.1:8000')
+mix.js('resources/js/landing.js', 'public/js')
+  .react()
+  .sass('resources/sass/app-landing.scss', 'public/css')
+  .sourceMaps()

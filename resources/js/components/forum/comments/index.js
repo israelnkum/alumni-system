@@ -1,15 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Avatar, Comment } from 'antd'
-import ReplyComment from '../replies/reply-comment'
+import { Avatar, Collapse, Comment } from 'antd'
+import ReplyForm from '../replies/reply-form'
 
 const Comments = (props) => {
-  const { topic, author } = props
+  const { topic, author, replyingToId, header, commentOrReply } = props
   return (
       <Comment
           actions={[
-              <ReplyComment key="comment-nested-reply-to"/>
-              // <span key="comment-nested-reply-to">Reply to</span>
+              // <ReplyComment key="comment-nested-reply-to"/>
+              <Collapse ghost key="comment-nested-reply-to"
+                        bordered={false}>
+                  <Collapse.Panel className={'replyHeader'} showArrow={false} header={header} key="1">
+                      <div style={{ width: '100%' }}>
+                          <ReplyForm commentType={commentOrReply} initialValues={{ replyingToId: replyingToId, id: 0 }}/>
+                      </div>
+                  </Collapse.Panel>
+              </Collapse>
           ]}
           author={<a>{author}</a>}
           avatar={
@@ -31,7 +38,14 @@ const Comments = (props) => {
 Comments.propTypes = {
   children: PropTypes.node,
   topic: PropTypes.string,
-  author: PropTypes.string
+  author: PropTypes.string,
+  replyingToId: PropTypes.number.isRequired,
+  header: PropTypes.string.isRequired,
+  commentOrReply: PropTypes.string
+}
+
+Comments.defaultProps = {
+  commentOrReply: 'comment'
 }
 
 export default Comments

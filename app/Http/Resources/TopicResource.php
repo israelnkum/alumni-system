@@ -19,11 +19,12 @@ class TopicResource extends JsonResource
     {
 //        return parent::toArray($request);
         return [
-          'id' => $this->id,
+            'id' => $this->id,
             'author'=> $this->user->name,
             'title' => $this->title,
             'created_at' => $this->created_at,
-            'comments' => $this->comments->count()
+            'comment_count' => $this->comments->count(),
+            'comments' => CommentResource::collection($this->comments),
         ];
     }
 }

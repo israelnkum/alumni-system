@@ -17,7 +17,7 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->integer('topicId');
             $table->longText('text');
-            $table->integer('author');
+            $table->integer('authorId');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -35,6 +35,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Forum api
     Route::prefix('forum')->group(function (){
         Route::apiResource('/topics', TopicController::class);
+
+
+        Route::prefix('/comments')->group(function (){
+            Route::post('/add', [TopicController::class, 'addComment']);
+        });
     });
 });
 
