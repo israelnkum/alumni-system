@@ -17,7 +17,7 @@ class CreateRepliesTable extends Migration
             $table->id();
             $table->morphs('replieable');
             $table->longText('text');
-            $table->integer('authorId ');
+            $table->integer('authorId');
             $table->softDeletes();
             $table->timestamps();
         });

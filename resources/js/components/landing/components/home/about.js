@@ -1,4 +1,27 @@
 import React from 'react'
+import { Row, Col } from 'antd'
+import { HomeOutlined, UsergroupAddOutlined } from '@ant-design/icons'
+
+const items = [
+  {
+    key: '1',
+    icon: <HomeOutlined />,
+    title: 'Faculties',
+    content: '5'
+  },
+  {
+    key: '2',
+    icon: <UsergroupAddOutlined />,
+    title: 'Department',
+    content: '26'
+  },
+  {
+    key: '3',
+    icon: <UsergroupAddOutlined />,
+    title: 'Alumni Members',
+    content: '24000'
+  }
+]
 
 const AppAbout = () => {
   return (
@@ -15,7 +38,22 @@ const AppAbout = () => {
                     and became part of the State Tertiary Education System.</p>
               </div>
           </div>
+          <Row gutter={[16, 16]} >
+              {items.map(item => {
+                return (
+                      <Col span={8} key={item.key}>
+                          <div className="content">
+                              <div className="icon">
+                                  {item.icon}
+                              </div>
+                          <h3>{item.title}</h3>
+                          <p>{item.content}</p>
+                          </div>
+                      </Col>
+                )
+              })}
 
+          </Row>
       </div>
   )
 }

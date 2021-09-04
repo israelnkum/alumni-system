@@ -1,8 +1,10 @@
 import React from 'react'
-import {Menu} from "antd";
+import { Menu } from 'antd'
+import AppSignup from '../home/signup'
+import AppSignIn from '../home/signin'
 
 const AppHeader = () => {
-    return (
+  return (
         <div className="container-fluid">
             <div className='header'>
                 <div className="logo">
@@ -13,12 +15,16 @@ const AppHeader = () => {
                     <Menu.Item key="event">Events</Menu.Item>
                     <Menu.Item key="forum">Forum</Menu.Item>
                     <Menu.Item key="jobs">Jobs</Menu.Item>
-                    <Menu.Item key="signIn">Sign In</Menu.Item>
-                    <Menu.Item key="signUp">Sign Up</Menu.Item>
+                    <Menu.Item key="signUp">
+                        <AppSignup/>
+                    </Menu.Item>
+                    <Menu.Item key="signIn">
+                        <AppSignIn />
+                    </Menu.Item>
                 </Menu>
             </div>
         </div>
-    )
+  )
 }
 
 export default AppHeader

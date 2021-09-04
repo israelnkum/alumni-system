@@ -39,8 +39,8 @@ title holder
 .titleHolder {
     text-align: center;
     position: relative;
-    padding: 0 0 20px;
-    margin: 0 0 40px;
+    padding: 10px 0 20px;
+    margin: 10px 0 50px;
 }
 
 .titleHolder:after {
@@ -200,7 +200,7 @@ hero
 ----
 */
 .heroBlock {
-    background: url('/imgs/bg-1.jpg') no-repeat;
+    background: url('/imgs/bg-2.jpg') no-repeat;
     background-position: 50% 100%;
     background-size: cover;
     height: 100vh;
@@ -282,14 +282,23 @@ about
 how it works
 ------------
 */
-//.worksBlock {
-//    background: url('assets/images/bg-works.jpg') no-repeat;
-//    background-position: 50% 0;
-//    background-size: cover;
-//    background-attachment: fixed;
-//    color: #fff;
-//    position: relative;
-//}
+.worksBlock {
+    background: url('/imgs/bg-3.jpg') no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+    background-attachment: fixed;
+    color: #fff;
+    position: relative;
+}
+.jobsBlock{
+    background: url('/imgs/grad.jpg') no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+    background-attachment: fixed;
+    color: #fff;
+    position: relative;
+
+}
 
 .worksBlock:before {
     content: '';
@@ -466,4 +475,19 @@ responsive
     .mobileHidden {
         display: none;
     }
+}
+
+.hero-title{
+    margin-top: 200px !important;
+    font-weight: bold;
+    font-size: 60px !important;
+
+
+
+}
+.hero-content{
+    font-size: 30px !important;
+
+
+
 }
