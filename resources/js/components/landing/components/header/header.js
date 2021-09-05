@@ -17,11 +17,21 @@ const AppHeader = () => {
                     <Menu.Item key="forum">Forum</Menu.Item>
                     <Menu.Item key="jobs">Jobs</Menu.Item>
                     <Menu.Item key="signUp">
-                        <AppSignup/>
+                        <a href={'/register'}>
+                            Sign Up
+                        </a>
                     </Menu.Item>
                     <Menu.Item key="signIn">
-                        <AppSignIn />
+                        <a href={'/login'}>
+                            Sign In
+                        </a>
                     </Menu.Item>
+                    {/* <Menu.Item key="signUp"> */}
+                    {/*    <AppSignup/> */}
+                    {/* </Menu.Item> */}
+                    {/* <Menu.Item key="signIn"> */}
+                    {/*    <AppSignIn /> */}
+                    {/* </Menu.Item> */}
                 </Menu>
             </div>
         </div>
