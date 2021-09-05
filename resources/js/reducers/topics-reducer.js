@@ -14,6 +14,7 @@ const ForumReducer = (state = initialState, action) => {
     case Types.TOPIC_DETAIL:
       return {
         ...state, topicDetail: action.payload
+        // ...state
       }
 
     case Types.ADD_TOPIC:

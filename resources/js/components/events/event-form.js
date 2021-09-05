@@ -4,6 +4,7 @@ import { Drawer, Form, Button, Col, Row, Input, message, Spin, Typography, DateP
 import { PlusOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
 import { handleAddNewEvent, handleUpdateEvent } from '../../actions/events/Actions'
+import Picture from '../commons/picture'
 
 const EventForm = (props) => {
   const { addEvent, updateEvent, initialValues, btnIcon, type } = props
@@ -11,6 +12,20 @@ const EventForm = (props) => {
   const [add, setAdding] = useState(false)
   const [visible, setVisible] = useState(false)
   const [form] = Form.useForm()
+
+  const uploadProps = {
+    beforeUpload: (file) => {
+      setSelectedFile(file)
+      return true
+    },
+    listType: 'picture-card',
+    maxCount: 1,
+    onRemove: () => {
+      setSelectedFile(null)
+    },
+    accept: 'image/*',
+    method: 'get'
+  }
 
   const toggleForm = () => {
     setVisible(!visible)
@@ -73,6 +88,9 @@ const EventForm = (props) => {
                           initialValues={initialValues}
                           hideRequiredMark onFinish={onFinish}>
                         <Row gutter={16}>
+                            <Col span={24} sm={24} xs={24} md={24} lg={24}>
+                                <Picture selectedFile={selectedFile} uploadProps={uploadProps}/>
+                            </Col>
                             <Col span={24}>
                                 <Form.Item
                                     name="name"

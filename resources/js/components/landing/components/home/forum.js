@@ -1,10 +1,22 @@
-import React from 'react'
-import { EditOutlined } from '@ant-design/icons'
-import { Card, Avatar, Row, Col } from 'antd'
+import React, { useEffect } from 'react'
+import { Card, Typography, Row, Col, Button } from 'antd'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { handleGetLandingTopics } from '../../../../actions/landing/Actions'
+import UserAvatar from '../../../commons/user-avatar'
+import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
 
 const { Meta } = Card
 
-const AppForum = () => {
+const AppForum = (props) => {
+  const { topics, getAllTopics } = props
+  const history = useHistory()
+
+  useEffect(() => {
+    getAllTopics()
+  }, [])
+
   return (
         <div className="block featureBlock bgGray">
             <div className="container-fluid">
@@ -13,65 +25,44 @@ const AppForum = () => {
                     <p>Share your views on latest updates</p>
                 </div>
                 <Row justify="center" gutter={[10, 10]}>
-                    <Col span={8}>
-                        <Card
-
-                            cover={
-                                <img
-                                    alt="example"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                />
-                            }
-                            actions={[
-                                <EditOutlined key="edit" />
-                            ]}
-                        >
-                            <Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title="Card title"
-                                description="This is the description"
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-
-                            cover={
-                                <img
-                                    alt="example"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                />
-                            }
-                            actions={[
-                                <EditOutlined key="edit" />
-                            ]}
-                        >
-                            <Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title="Card title"
-                                description="This is the description"
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-
-                            cover={
-                                <img
-                                    alt="example"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                                />
-                            }
-                            actions={[
-                                <EditOutlined key="edit" />
-                            ]}
-                        >
-                            <Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title="Card title"
-                                description="This is the description"
-                            />
-                        </Card>
+                    {
+                        topics.map((topic, index) => (
+                          index < 4 && <Col key={topic.id} span={6}>
+                                <Card hoverable
+                                      onClick={() => {
+                                        history.push(`/landing/forum/${topic.title}/${topic.id}`)
+                                      }}
+                                      cover={
+                                          <img alt="image"
+                                               src={`/storage/images/topics/${topic.photo || 'default.png'}`}
+                                          />
+                                      }>
+                                    <Meta
+                                        avatar={
+                                            <UserAvatar name={topic.author}/>
+                                        }
+                                        title={topic.title}
+                                        description={
+                                            <>
+                                                <Typography.Text type="secondary">
+                                                    Author: {topic.author}
+                                                </Typography.Text> <br/>
+                                                <Typography.Text italic>
+                                                    {topic.comment_count} Comments
+                                                </Typography.Text>
+                                            </>
+                                        }
+                                    />
+                                </Card>
+                            </Col>
+                        ))
+                    }
+                    <Col span={24} xs={24} lg={24} xl={24}>
+                        <div align={'center'}>
+                            <Link to={'/landing/forum'}>
+                                <Button>View All Topics</Button>
+                            </Link>
+                        </div>
                     </Col>
                 </Row>
 
@@ -81,4 +72,21 @@ const AppForum = () => {
 
   )
 }
-export default AppForum
+
+AppForum.propTypes = {
+  topics: PropTypes.array,
+  getAllTopics: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => {
+  return {
+    topics: state.LandingEventsReducer.topics
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllTopics: (data) => dispatch(handleGetLandingTopics(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppForum)

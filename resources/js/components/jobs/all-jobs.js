@@ -11,7 +11,7 @@ import { handleDeleteJob, handleGetAllJob } from '../../actions/jobs/Actions'
 const { Column } = Table
 function AllJobs (props) {
   const [loading, setLoading] = useState()
-  const { jobs, getAllJobs, deleteJob } = props
+  const { jobs, getAllJobs, deleteJob, userType } = props
   useEffect(() => {
     setLoading(true)
     getAllJobs().then(() => {
@@ -37,20 +37,24 @@ function AllJobs (props) {
             <Column title="Description" render={(text, record) => (
                 <Typography.Text>{parse(record.description)}</Typography.Text>
             )}/>
-            <Column
-                title="Action"
-                render={(text, record) => (
-                    <Space>
-                        <StaffForm initialValues={{
-                          ...record,
-                          closingDate: moment(record.closingDate, 'YYYY-MM-DD hh:mm A')
-                        }} btnIcon={<EditOutlined />}/>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => { handleDelete(record.id) }} cancelText={'No'} okText={'Yes'}>
-                            <Button size={'small'} danger icon={<DeleteOutlined/>}/>
-                        </Popconfirm>
-                    </Space>
-                )}
-            />
+            {
+                userType === 'admin' &&
+                <Column
+                    title="Action"
+                    render={(text, record) => (
+                        <Space>
+                            <StaffForm initialValues={{
+                              ...record,
+                              closingDate: moment(record.closingDate, 'YYYY-MM-DD hh:mm A')
+                            }} btnIcon={<EditOutlined />}/>
+                            <Popconfirm title="Sure to delete?" onConfirm={() => { handleDelete(record.id) }} cancelText={'No'} okText={'Yes'}>
+                                <Button size={'small'} danger icon={<DeleteOutlined/>}/>
+                            </Popconfirm>
+                        </Space>
+                    )}
+                />
+            }
+
         </Table>
   )
 }
@@ -58,12 +62,14 @@ function AllJobs (props) {
 AllJobs.propTypes = {
   jobs: PropTypes.array.isRequired,
   getAllJobs: PropTypes.func.isRequired,
-  deleteJob: PropTypes.func.isRequired
+  deleteJob: PropTypes.func.isRequired,
+  userType: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    jobs: state.JobsReducer.jobs
+    jobs: state.JobsReducer.jobs,
+    userType: state.UsersReducer.authUser.userType
   }
 }
 

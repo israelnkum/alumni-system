@@ -25,6 +25,8 @@ class TopicResource extends JsonResource
             'created_at' => $this->created_at,
             'comment_count' => $this->comments->count(),
             'comments' => CommentResource::collection($this->comments),
+            'authorId' =>$this->author,
+            'photo' =>$this->photo->photoUrl,
         ];
     }
 }

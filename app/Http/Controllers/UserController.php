@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\HelperFunctions;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +20,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(UserResource::collection(User::all()));
     }
 
     /**
@@ -32,7 +35,31 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // check if name is already taken
+        $checkName = User::query()->where('username', $request->username)->count();
+        if ($checkName > 0){
+            return response('User with the same username already exist', 400);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            // add User to db
+            $request['password'] = Hash::make($request->username);
+            $user = User::create($request->all());
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($user, $request->file('file'), 'users');
+            }
+
+            DB::commit();
+            return response(new UserResource($user));
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response($exception,400);
+        }
     }
 
     /**
@@ -53,9 +80,26 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): Response
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            // add User to db
+            $user = User::find($id);
+            $user->update($request->all());
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($user, $request->file('file'), 'users');
+            }
+
+            DB::commit();
+            return response(new UserResource($user));
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response($exception,400);
+        }
     }
 
     /**
@@ -100,7 +144,7 @@ class UserController extends Controller
                 DB::commit();
                 return \response(new UserResource($user));
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return \response('Something went wrong!', 400);
         }

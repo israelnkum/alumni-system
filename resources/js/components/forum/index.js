@@ -6,8 +6,9 @@ import TopicForm from './topic-form'
 const Forum = () => {
   return (
         <React.Fragment>
-            <AppPageHeader title={'Forum'}/>
-            <TopicForm key={1}/>
+            <AppPageHeader title={'Forum'} extras={[
+                <TopicForm key={1}/>
+            ]}/> <br/>
             <AllTopics/>
         </React.Fragment>
   )

@@ -5,6 +5,7 @@ import UsersReducer from './users-reducer'
 import EventsReducer from './events-reducer'
 import JobsReducer from './jobs-reducer'
 import TopicsReducer from './topics-reducer'
+import LandingEventsReducer from './landing-events-reducer'
 
 const persistConfig = {
   key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
     'UsersReducer',
     'EventsReducer',
     'JobsReducer',
-    'TopicsReducer'
+    'TopicsReducer',
+    'LandingEventsReducer'
   ]
 }
 
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
   UsersReducer,
   EventsReducer,
   JobsReducer,
-  TopicsReducer
+  TopicsReducer,
+  LandingEventsReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)

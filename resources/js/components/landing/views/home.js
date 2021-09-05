@@ -12,13 +12,12 @@ import AppSignin from '../components/home/signin'
 const AppHome = () => {
   return (
         <div className="main">
-             <AppHero />
-             <AppAbout />
-             <AppEvent />
+            <AppHero />
+            <AppAbout />
+            <AppEvent />
             <CurrentAlumni />
             <AppForum />
             <AppJobs />
-
             <AppSignin />
         </div>
   )

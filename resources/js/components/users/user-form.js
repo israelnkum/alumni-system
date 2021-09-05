@@ -1,135 +1,143 @@
 import React, { useState } from 'react'
-import { Drawer, Form, Button, Col, Row, Input, Select, DatePicker } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { Drawer, Form, Button, Col, Row, Input, Select, message } from 'antd'
 import { connect } from 'react-redux'
+import Picture from '../commons/picture'
+import PropTypes from 'prop-types'
+import { handleAddNewUser, handleUpdateUser } from '../../actions/users/Actions'
 
 const { Option } = Select
 
-const UserForm = () => {
+const UserForm = (props) => {
+  const { addUser, initialValues, updateUser, btnText } = props
   const [visible, setVisible] = useState(false)
-
+  const [add, setAdding] = useState(false)
   const showDrawer = () => {
     setVisible(!visible)
   }
 
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [form] = Form.useForm()
+  const uploadProps = {
+    beforeUpload: (file) => {
+      setSelectedFile(file)
+      return true
+    },
+    listType: 'picture-card',
+    maxCount: 1,
+    onRemove: () => {
+      setSelectedFile(null)
+    },
+    accept: 'image/*',
+    method: 'get'
+  }
+  const onFinish = (values) => {
+    setAdding(true)
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    values.id !== 0 && formData.append('_method', 'PUT')
+    for (const key in values) {
+      if (Object.prototype.hasOwnProperty.call(values, key)) { formData.append(key, values[key]) }
+    }
+    (values.id === 0 ? addUser(formData) : updateUser(formData))
+      .then(() => {
+        setAdding(false)
+        message.success('User ' + (values.id === 0 ? 'Added' : 'Updated'))
+        form.resetFields()
+        setSelectedFile(null)
+        showDrawer()
+      }).catch((error) => {
+        setAdding(false)
+        message.warning(error.response.data)
+      })
+  }
+
   return (
         <>
-            <Button type="primary" onClick={showDrawer}>
-                <PlusOutlined /> New account
+            <Button size={'small'} type="primary" onClick={showDrawer}>
+                {btnText}
             </Button>
             <Drawer
                 title="Create a new account"
-                width={720}
+                width={300}
                 onClose={showDrawer}
                 visible={visible}
                 bodyStyle={{ paddingBottom: 80 }}
-                footer={
-                    <div
-                        style={{
-                          textAlign: 'right'
-                        }}
-                    >
-                        <Button onClick={showDrawer} style={{ marginRight: 8 }}>
-                            Cancel
-                        </Button>
-                        <Button onClick={showDrawer} type="primary">
-                            Submit
-                        </Button>
-                    </div>
-                }
             >
-                <Form layout="vertical" hideRequiredMark>
+                <Form initialValues={initialValues} layout="vertical" onFinish={onFinish}>
                     <Row gutter={16}>
-                        <Col span={12}>
+                        <Col span={24} sm={24} xs={24} md={24} lg={24}>
+                            <Picture selectedFile={selectedFile} uploadProps={uploadProps}/>
+                        </Col>
+                        <Col span={24}>
                             <Form.Item
                                 name="name"
                                 label="Name"
-                                rules={[{ required: true, message: 'Please enter user name' }]}
+                                rules={[{ required: true, message: 'Please enter name' }]}
                             >
-                                <Input placeholder="Please enter user name" />
+                                <Input/>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="url"
-                                label="Url"
-                                rules={[{ required: true, message: 'Please enter url' }]}
-                            >
-                                <Input
-                                    style={{ width: '100%' }}
-                                    addonBefore="http://"
-                                    addonAfter=".com"
-                                    placeholder="Please enter url"
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="owner"
-                                label="Owner"
-                                rules={[{ required: true, message: 'Please select an owner' }]}
-                            >
-                                <Select placeholder="Please select an owner">
-                                    <Option value="xiao">Xiaoxiao Fu</Option>
-                                    <Option value="mao">Maomao Zhou</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="type"
-                                label="Type"
-                                rules={[{ required: true, message: 'Please choose the type' }]}
-                            >
-                                <Select placeholder="Please choose the type">
-                                    <Option value="private">Private</Option>
-                                    <Option value="public">Public</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="approver"
-                                label="Approver"
-                                rules={[{ required: true, message: 'Please choose the approver' }]}
-                            >
-                                <Select placeholder="Please choose the approver">
-                                    <Option value="jack">Jack Ma</Option>
-                                    <Option value="tom">Tom Liu</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="dateTime"
-                                label="DateTime"
-                                rules={[{ required: true, message: 'Please choose the dateTime' }]}
-                            >
-                                <DatePicker.RangePicker
-                                    style={{ width: '100%' }}
-                                    getPopupContainer={trigger => trigger.parentElement}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
-                                name="description"
-                                label="Description"
+                                name="username"
+                                label="Username"
+                                rules={[{ required: true, message: 'Please enter username' }]}
+                            >
+                                <Input/>
+                            </Form.Item>
+                            <Form.Item
+                                label="ID"
+                                name="id"
+                                hidden
                                 rules={[
                                   {
                                     required: true,
-                                    message: 'please enter url description'
+                                    message: 'Required'
                                   }
                                 ]}
                             >
-                                <Input.TextArea rows={4} placeholder="please enter url description" />
+                                <Input />
                             </Form.Item>
+                        </Col>
+                        <Col span={24}>
+                            <Form.Item
+                                name="email"
+                                label="Email"
+                                rules={[
+                                  { type: 'email', message: 'Invalid email' }
+                                ]}
+                            >
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={24}>
+                            <Form.Item
+                                name="userType"
+                                label="User Type"
+                                rules={[
+                                  { required: true, message: 'Select User Type' }
+                                ]}
+                            >
+                            <Select style={{ width: '100%' }}>
+                                <Option value="alumni">Alumni</Option>
+                                <Option value="admin">Admin</Option>
+                            </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={24}>
+                            <div
+                                style={{
+                                  textAlign: 'right'
+                                }}
+                            >
+                                <Button onClick={showDrawer} style={{ marginRight: 8 }}>
+                                    Cancel
+                                </Button>
+                                <Button loading={add} htmlType={'submit'} type="primary">
+                                    Submit
+                                </Button>
+                            </div>
                         </Col>
                     </Row>
                 </Form>
@@ -137,5 +145,30 @@ const UserForm = () => {
         </>
   )
 }
+UserForm.propTypes = {
+  addUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
+  btnText: PropTypes.any
+}
 
-export default connect()(UserForm)
+UserForm.defaultProps = {
+  initialValues: {
+    id: 0
+  },
+  btnText: 'New account'
+}
+
+const mapStateToProps = (state) => {
+  return {
+
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addUser: (payload) => dispatch(handleAddNewUser(payload)),
+    updateUser: (payload) => dispatch(handleUpdateUser(payload))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserForm)

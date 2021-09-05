@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlumniJob;
+use App\Models\Event;
+use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class HomeController extends Controller
 {
@@ -25,5 +29,15 @@ class HomeController extends Controller
     public function index(): Renderable
     {
         return view('home');
+    }
+
+    public function getInitialData(): JsonResponse
+    {
+        return response()->json([
+            'jobs' => AlumniJob::all()->count(),
+            'events' => Event::all()->count(),
+            'users' => User::all()->count(),
+            'topics' => Topic::all()->count(),
+        ]);
     }
 }
