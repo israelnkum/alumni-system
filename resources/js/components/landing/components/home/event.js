@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Row, Col, Card } from 'antd'
+import { connect } from 'react-redux'
+import { handleGetUpcomingEvents } from '../../../../actions/landing/Actions'
 
 const { Meta } = Card
 
-const AppEvent = () => {
+const AppEvent = (props) => {
+  const { events, upcomingEvents } = props
+  useEffect(() => {
+    upcomingEvents()
+  }, [])
   return (
         <div className="block featureBlock bgGray">
             <div className="container-fluid">
@@ -11,58 +18,39 @@ const AppEvent = () => {
                     <h2>Upcoming Events</h2>
                 </div>
                 <Row gutter={[16, 16]}>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="Get Together" src="/imgs/get.jpg" />}
-                        >
-                            <Meta title="Alumni Get-Together" description="Venue is at the schools' auditorium" />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="Fashion" src="/imgs/fair.JPG" />}
-                        >
-                            <Meta title="Fashion Design Training" description="Venue is at the schools' auditorium" />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="jams" src="/imgs/jams.jpeg" />}
-                        >
-                            <Meta title="Jamm at Ease" description="Venue is at the schools' auditorium" />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="sod cutting" src="/imgs/sod.jpeg" />}
-                        >
-                            <Meta title="Sod Cutting at Akatakyi Campus" description="Venue is at the schools' auditorium"/>
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="lab" src="/imgs/lab.JPG" />}
-                        >
-                            <Meta title="Commemoration of New IT labs" description="Venue is at the schools' auditorium" />
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            hoverable
-                            cover={<img alt="induction" src="/imgs/induction.jpg" />}
-                        >
-                            <Meta title="Investiture and Induction" description="Venue is at the schools' auditorium" />
-                        </Card>
-                    </Col>
+                    {
+                        events.map((event) => (
+                            <Col span={8} key={event.id}>
+                                <Card
+                                    hoverable
+                                    cover={<img alt="Get Together" src={`/storage/images/events/${event.photo}`} />}
+                                >
+                                    <Meta title={event.name} description={event.description} />
+                                </Card>
+                            </Col>
+                        ))
+                    }
                 </Row>
             </div>
 
         </div>
   )
 }
-export default AppEvent
+
+AppEvent.propTypes = {
+  events: PropTypes.array.isRequired,
+  upcomingEvents: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => {
+  return {
+    events: state.LandingEventsReducer.events
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    upcomingEvents: (data) => dispatch(handleGetUpcomingEvents(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppEvent)

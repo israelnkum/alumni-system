@@ -1,9 +1,11 @@
 import React from 'react'
-import { Menu, Dropdown, Card, Avatar, Typography } from 'antd'
-import { DownOutlined, LockOutlined, EditOutlined, PoweroffOutlined, UserOutlined } from '@ant-design/icons'
+import { Dropdown, Card, Avatar, Typography } from 'antd'
+import { DownOutlined, LockOutlined, PoweroffOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-const AppAvatar = () => {
+const AppAvatar = (props) => {
   const menu = (
         <React.Fragment>
             <Card className={'profile-card'} style={{ width: 200 }} actions={[
@@ -14,11 +16,9 @@ const AppAvatar = () => {
                 <PoweroffOutlined key="logout" title={'Logout'}/>
             ]}>
                 <div align={'center'}>
-                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                    <Avatar style={{ backgroundColor: '#00317c' }} src={`/storage/images/users/${props.photo}`} />
                     <br/>
-                    <Typography.Text>Tracy Sarah</Typography.Text>
-                    <br/>
-                    0718000075
+                    <Typography.Text>{props.name}</Typography.Text>
                 </div>
             </Card>
 
@@ -29,10 +29,19 @@ const AppAvatar = () => {
             overlay={menu}
         >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                Hi Tracy &nbsp;<DownOutlined />
+                Hi {props.name.split(' ')[0]} &nbsp;<DownOutlined />
             </a>
         </Dropdown>
   )
 }
-
-export default AppAvatar
+AppAvatar.propTypes = {
+  name: PropTypes.string.isRequired,
+  photo: PropTypes.string
+}
+const mapStateToProps = (state) => {
+  return {
+    name: state.UsersReducer.authUser.name,
+    photo: state.UsersReducer.authUser.photo
+  }
+}
+export default connect(mapStateToProps)(AppAvatar)

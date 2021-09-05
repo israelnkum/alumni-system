@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Avatar, Collapse, Comment } from 'antd'
+import { Avatar, Collapse, Comment, Typography } from 'antd'
 import ReplyForm from '../replies/reply-form'
 
 const Comments = (props) => {
-  const { topic, author, replyingToId, header, commentOrReply } = props
+  const { topic, author, replyingToId, header, commentOrReply, disabled } = props
   return (
       <Comment
           actions={[
-              // <ReplyComment key="comment-nested-reply-to"/>
-              <Collapse ghost key="comment-nested-reply-to"
-                        bordered={false}>
+            disabled !== true &&
+              <Collapse ghost key="comment-nested-reply-to" bordered={false}>
                   <Collapse.Panel className={'replyHeader'} showArrow={false} header={header} key="1">
                       <div style={{ width: '100%' }}>
                           <ReplyForm commentType={commentOrReply} initialValues={{ replyingToId: replyingToId, id: 0 }}/>
@@ -20,15 +19,16 @@ const Comments = (props) => {
           ]}
           author={<a>{author}</a>}
           avatar={
-              <Avatar
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                  alt="Han Solo"
-              />
+              <Avatar style={{
+                color: '#f56a00',
+                backgroundColor: '#fde3cf'
+              }}>{author.charAt(0)}
+              </Avatar>
           }
           content={
-              <p>
+              <Typography.Text>
                   {topic}
-              </p>
+              </Typography.Text>
           }
       >
           {props.children}
@@ -41,11 +41,13 @@ Comments.propTypes = {
   author: PropTypes.string,
   replyingToId: PropTypes.number.isRequired,
   header: PropTypes.string.isRequired,
-  commentOrReply: PropTypes.string
+  commentOrReply: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 Comments.defaultProps = {
-  commentOrReply: 'comment'
+  commentOrReply: 'comment',
+  disabled: false
 }
 
 export default Comments

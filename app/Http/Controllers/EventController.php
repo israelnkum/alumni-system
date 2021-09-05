@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\HelperFunctions;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
@@ -34,7 +35,7 @@ class EventController extends Controller
         // check if name is already taken
         $checkEmail = Event::query()->where('name',$request->email)->count();
         if ($checkEmail > 0){
-            return response('Event with the same already exist', 400);
+            return response('Event with the same name already exist', 400);
         }
 
         DB::beginTransaction();
@@ -46,6 +47,11 @@ class EventController extends Controller
 
             // add event to db
             $event = Event::create($request->all());
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($event, $request->file('file'), 'events');
+            }
 
             DB::commit();
             return response(new EventResource($event));
@@ -85,6 +91,11 @@ class EventController extends Controller
             // update to db
             $event = Event::find($id);
             $event->update($request->all());
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($event, $request->file('file'), 'events');
+            }
 
             DB::commit();
             return response(new EventResource($event));

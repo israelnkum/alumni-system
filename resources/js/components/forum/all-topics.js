@@ -1,82 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import moment from 'moment'
 import PropTypes from 'prop-types'
-import { List, message, Avatar, Spin, Card, Space } from 'antd'
-
-import InfiniteScroll from 'react-infinite-scroller'
+import { Spin } from 'antd'
 import { handleDeleteTopic, handleGetAllTopics } from '../../actions/forum/Actions'
 import { connect } from 'react-redux'
-import { EditOutlined } from '@ant-design/icons'
-import TopicForm from './topic-form'
-import { Link } from 'react-router-dom'
+import TopicList from '../commons/topic-list'
 
 const AllTopics = (props) => {
-  const { getAllTopics, topics } = props
+  const { getAllTopics, topics, authUser } = props
   const [loading, setLoading] = useState(false)
-  const [hasMore, setHasMore] = useState(false)
 
   useEffect(() => {
-    fetchData()
-  }, [])
-
-  const fetchData = () => {
     getAllTopics().then(() => {
       setLoading(false)
     })
-  }
-
-  const handleInfiniteOnLoad = () => {
-    setLoading(true)
-    if (topics.length > 14) {
-      message.warning('Infinite List loaded all')
-      setHasMore(false)
-      setLoading(false)
-      return
-    }
-    fetchData()
-  }
+  }, [])
 
   return (
-      <List
-          pagination={{
-            pageSize: 10
-          }}
-          grid={{ gutter: 16, column: 1 }}
-          dataSource={topics}
-          renderItem={item => (
-              <List.Item
-                  key={item.id}>
-                  <Card size={'small'} title={moment(item.created_at).format('ddd, Do hA')} extra={[
-                      <EditOutlined key={'edit'}/>
-                  ]}>
-                      <Card.Meta
-                          avatar={
-                              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                          }
-                          title={<Link to={`/forum/${item.title}/${item.id}`}>{item.title}</Link>}
-                          description={
-                              <Space>
-                                  {'Author: ' + item.author}
-                                  {item.comment_count + ' comments'}
-                              </Space>
-                          }
-                      />
-                  </Card>
-              </List.Item>
-          )}
-      >
-      </List>
+    <Spin spinning={loading}>
+      <TopicList topics={topics} authUser={authUser.id}/>
+    </Spin>
   )
 }
 AllTopics.propTypes = {
   topics: PropTypes.array.isRequired,
+  authUser: PropTypes.object.isRequired,
   getAllTopics: PropTypes.func.isRequired,
   deleteTopic: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    topics: state.TopicsReducer.topics
+    topics: state.TopicsReducer.topics,
+    authUser: state.UsersReducer.authUser
   }
 }
 
@@ -84,7 +39,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getAllTopics: () => dispatch(handleGetAllTopics()),
     deleteTopic: (id) => dispatch(handleDeleteTopic(id))
-
   }
 }
 

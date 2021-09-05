@@ -2,13 +2,14 @@ import React from 'react'
 import { Menu } from 'antd'
 import AppSignup from '../home/signup'
 import AppSignIn from '../home/signin'
+import { Link } from 'react-router-dom'
 
 const AppHeader = () => {
   return (
         <div className="container-fluid">
             <div className='header'>
                 <div className="logo">
-                    <img className="img" src="/imgs/logo.png"/>
+                    <Link to={'/'}><img className="img" src="/imgs/logo.png" alt={'Logo'}/></Link>
                 </div>
                 <Menu mode="horizontal" defaultSelectedKeys={['home']}>
                     <Menu.Item key="home">Home</Menu.Item>

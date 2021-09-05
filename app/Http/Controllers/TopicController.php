@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\HelperFunctions;
 use App\Http\Resources\TopicResource;
 use App\Models\Comment;
+use App\Models\Reply;
 use App\Models\Topic;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -23,8 +25,8 @@ class TopicController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(TopicResource::collection(Topic::all()));
-//        return response()->json(new TopicResource(Topic::query()->paginate(5)));
+        $topics = Topic::query()->where('author', Auth::user()->id)->get();
+        return response()->json(TopicResource::collection($topics));
 
     }
 
@@ -41,10 +43,15 @@ class TopicController extends Controller
 
             $request['author'] = Auth::user()->id;
             // add topic to db
-            $event = Topic::create($request->all());
+            $topic = Topic::create($request->all());
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($topic, $request->file('file'), 'topics');
+            }
 
             DB::commit();
-            return response(new TopicResource($event));
+            return response(new TopicResource($topic));
         }catch (Exception $exception){
             DB::rollBack();
             return response($exception,400);
@@ -69,9 +76,25 @@ class TopicController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): Response
     {
-        //
+        DB::beginTransaction();
+        try {
+            // Find the topic based on ID
+            $topic = Topic::find($id);
+
+            // update topic with new data
+            $topic->update($request->all());
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($topic, $request->file('file'), 'topics');
+            }
+            DB::commit();
+            return response(new TopicResource($topic));
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response($exception,400);
+        }
     }
 
     /**
@@ -91,6 +114,7 @@ class TopicController extends Controller
      */
     public function addComment(Request $request)
     {
+//        return $request;
         DB::beginTransaction();
         try {
             if ($request->type == 'reply'){
@@ -101,6 +125,15 @@ class TopicController extends Controller
                 ]);
                 DB::commit();
                 return response(new TopicResource(Topic::find($comment->topicId)));
+            }elseif ($request->type == 'replyToReply'){
+                $reply = Reply::find($request->replyingToId);
+                $reply->replies()->create([
+                    'text' => $request->text,
+                    'authorId' => Auth::user()->id
+                ]);
+                DB::commit();
+                $topicId = isset($reply->replieable->replieable) ? $reply->replieable->replieable->topicId : $reply->replieable->topicId;
+                return response(new TopicResource(Topic::find($topicId)));
             }{
                 $topic = Topic::find($request->replyingToId);
                 $topic->comments()->create([

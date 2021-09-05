@@ -15,19 +15,32 @@ const TopicDetail = (props) => {
     getTopicDetail(topicId).then(() => {
       setLoading(false)
     })
-  }, [])
+  }, [topicId])
 
   return (
       <Spin spinning={loading}>
           {
-              topicDetail &&
+              (loading === false && topicDetail) &&
               <Comments header={'Add Comment'} replyingToId={parseInt(topicId)} topic={topicDetail.title} author={topicDetail.author}>
                   {
-                      topicDetail.comments.map((comment) => (
+                      topicDetail.comments && topicDetail.comments.map((comment) => (
                           <Comments commentOrReply={'reply'} header={'Reply'} key={comment.id} replyingToId={comment.id} topic={comment.text} author={comment.author.name}>
                               {
                                   comment.replies && comment.replies.map((reply) => (
-                                      <Comments key={reply.id} header={'Reply'} replyingToId={reply.id} topic={reply.text} author={'osikani'}/>
+                                      <Comments commentOrReply={'replyToReply'} key={reply.id} header={'Reply'} replyingToId={reply.id} topic={reply.text} author={reply.author}>
+                                          {
+                                              reply.replies && reply.replies.map((rep) => (
+                                                  <Comments commentOrReply={'replyToReply'} key={rep.id} header={'Reply'} replyingToId={rep.id} topic={rep.text} author={rep.author}>
+
+                                                      {
+                                                          rep.replies && rep.replies.map((re) => (
+                                                              <Comments disabled={true} commentOrReply={'replyToReply'} key={re.id} header={'Reply'} replyingToId={re.id} topic={re.text} author={re.author}/>
+                                                          ))
+                                                      }
+                                                  </Comments>
+                                              ))
+                                          }
+                                      </Comments>
                                   ))
                               }
                           </Comments>

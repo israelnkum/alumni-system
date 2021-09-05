@@ -10,7 +10,7 @@ import { handleDeleteEvent, handleGetAllEvent } from '../../actions/events/Actio
 const { Column } = Table
 function AllEvents (props) {
   const [loading, setLoading] = useState()
-  const { events, getAllEvents, deleteEvent } = props
+  const { events, getAllEvents, deleteEvent, userType } = props
   useEffect(() => {
     setLoading(true)
     getAllEvents().then(() => {
@@ -34,23 +34,28 @@ function AllEvents (props) {
             <Column title="Start Date" dataIndex="startDate"/>
             <Column title="End Date" dataIndex="endDate"/>
             <Column title="Description" dataIndex="description"/>
-            <Column
-                title="Action"
-                render={(text, record) => (
-                    <Space>
-                        <StaffForm initialValues={{
-                          ...record,
-                          startDateAndTime: [
-                            moment(record.startDate, 'YYYY-MM-DD hh:mm A'),
-                            moment(record.endDate, 'YYYY-MM-DD hh:mm A')
-                          ]
-                        }} btnIcon={<EditOutlined />}/>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => { handleDelete(record.id) }} cancelText={'No'} okText={'Yes'}>
-                            <Button size={'small'} danger icon={<DeleteOutlined/>}/>
-                        </Popconfirm>
-                    </Space>
-                )}
-            />
+            {
+                userType === 'admin' &&
+                <Column
+                    title="Action"
+                    render={(text, record) => (
+                        <Space>
+                            <StaffForm initialValues={{
+                              ...record,
+                              startDateAndTime: [
+                                moment(record.startDate, 'YYYY-MM-DD hh:mm A'),
+                                moment(record.endDate, 'YYYY-MM-DD hh:mm A')
+                              ]
+                            }} btnIcon={<EditOutlined/>}/>
+                            <Popconfirm title="Sure to delete?" onConfirm={() => {
+                              handleDelete(record.id)
+                            }} cancelText={'No'} okText={'Yes'}>
+                                <Button size={'small'} danger icon={<DeleteOutlined/>}/>
+                            </Popconfirm>
+                        </Space>
+                    )}
+                />
+            }
         </Table>
   )
 }
@@ -58,12 +63,14 @@ function AllEvents (props) {
 AllEvents.propTypes = {
   events: PropTypes.array.isRequired,
   getAllEvents: PropTypes.func.isRequired,
-  deleteEvent: PropTypes.func.isRequired
+  deleteEvent: PropTypes.func.isRequired,
+  userType: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    events: state.EventsReducer.events
+    events: state.EventsReducer.events,
+    userType: state.UsersReducer.authUser.userType
   }
 }
 
