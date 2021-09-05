@@ -63,10 +63,13 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-2">
+                            <div class="col-md-12 mb-2 text-center">
                                 <button type="submit" class="btn  btn-block btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                                <a class="btn btn-link" href="{{ route('register') }}">
+                                    {{ __('Sign Up') }}
+                                </a>
                                {{-- @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
