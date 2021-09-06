@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\HelperFunctions;
 use App\Http\Resources\UserResource;
+use App\Imports\UserImport;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -14,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -147,6 +149,44 @@ class UserController extends Controller
         }catch (Exception $exception){
             DB::rollBack();
             return \response('Something went wrong!', 400);
+        }
+    }
+
+    public function userImport(Request $request)
+    {
+
+        set_time_limit(36000);
+        $valid_exts = array('csv','xls','xlsx'); // valid extensions
+        $file = $request->file('file');
+        if (!empty($file)) {
+            $ext = strtolower($file->getClientOriginalExtension());
+            if (in_array($ext, $valid_exts)) {
+                $studentList= Excel::toCollection(new UserImport(),$file);
+                $users = $studentList[0];
+                DB::beginTransaction();
+                try {
+                    for ($i = 0; $i < count($users); $i++) {
+                        User::updateOrCreate([
+                            'username' => $users[$i]['username']
+                        ],[
+                            'name' => $users[$i]['name'],
+                            'email' => $users[$i]['email'],
+                            'password' => Hash::make($users[$i]['username']),
+                            'userType' => $request->userType,
+                        ]);
+
+                    }
+                    DB::commit();
+                    return \response(UserResource::collection(User::all()));
+                }catch (Exception $exception){
+                    DB::rollBack();
+                    return \response($exception, 422);
+                }
+            }else {
+                return \response('Only excel file is accepted!', 422);
+            }
+        } else {
+            return \response('Please upload an excel file!', 422);
         }
     }
 }

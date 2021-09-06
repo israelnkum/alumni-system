@@ -33,7 +33,10 @@ function AllUsers (props) {
             <Column
                 title="Image"
                 render={(text, record) => (
-                   <Avatar src={`/storage/images/users/${record.photo}`}/>
+                  // <Avatar src={`/storage/images/users/${record.photo}`}/>
+                    <Avatar style={{ backgroundColor: '#00317c' }}>
+                        {record.name.charAt(0)}
+                    </Avatar>
                 )}
             />
             <Column title="Name" dataIndex="name"/>

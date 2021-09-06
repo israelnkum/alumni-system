@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('/users',UserController::class);
     Route::prefix('user')->group(function (){
         Route::get('/auth',[UserController::class, 'getAuthUser']);
+        Route::post('/import',[UserController::class, 'userImport']);
         Route::post('/change-password',[UserController::class, 'changePassword']);
     });
 

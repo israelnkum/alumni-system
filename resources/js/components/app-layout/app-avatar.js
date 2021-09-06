@@ -1,27 +1,42 @@
-import React from 'react'
-import { Dropdown, Card, Avatar, Typography } from 'antd'
-import { DownOutlined, LockOutlined, PoweroffOutlined, UserOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import { Dropdown, Card, Avatar, Typography, Spin } from 'antd'
+import { DownOutlined, LockOutlined, PoweroffOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { handleLogout } from '../../actions/logout/LogoutAction'
 
 const AppAvatar = (props) => {
+  const [loading, setLoading] = useState(false)
+
+  const initiateLogout = () => {
+    setLoading(true)
+    props.logout().then(() => {
+      window.location.reload()
+      window.location.replace('/login')
+      setLoading(false)
+    })
+  }
   const menu = (
         <React.Fragment>
-            <Card className={'profile-card'} style={{ width: 200 }} actions={[
-                <Link to={'/password/change'} key="change-password">
-                    <LockOutlined title={'Change Password'} />
-                </Link>,
-                <UserOutlined key="profile" title={'Profile'}/>,
-                <PoweroffOutlined key="logout" title={'Logout'}/>
-            ]}>
-                <div align={'center'}>
-                    <Avatar style={{ backgroundColor: '#00317c' }} src={`/storage/images/users/${props.photo}`} />
-                    <br/>
-                    <Typography.Text>{props.name}</Typography.Text>
-                </div>
-            </Card>
-
+            <Spin spinning={loading}>
+                <Card className={'profile-card'} style={{ width: 200 }} actions={[
+                    <Link to={'/password/change'} key="change-password">
+                        <LockOutlined title={'Change Password'} />
+                    </Link>,
+                    // <UserOutlined key="profile" title={'Profile'}/>,
+                    <PoweroffOutlined onClick={() => initiateLogout()} key="logout" title={'Logout'}/>
+                ]}>
+                    <div align={'center'}>
+                        {/* <Avatar style={{ backgroundColor: '#00317c' }} src={`/storage/images/users/${props.photo}`} /> */}
+                        <Avatar style={{ backgroundColor: '#00317c' }}>
+                            {props.name.charAt(0)}
+                        </Avatar>
+                        <br/>
+                        <Typography.Text>{props.name}</Typography.Text>
+                    </div>
+                </Card>
+            </Spin>
         </React.Fragment>
   )
   return (
@@ -36,7 +51,8 @@ const AppAvatar = (props) => {
 }
 AppAvatar.propTypes = {
   name: PropTypes.string.isRequired,
-  photo: PropTypes.string
+  photo: PropTypes.string,
+  logout: PropTypes.func.isRequired
 }
 const mapStateToProps = (state) => {
   return {
@@ -44,4 +60,9 @@ const mapStateToProps = (state) => {
     photo: state.UsersReducer.authUser.photo
   }
 }
-export default connect(mapStateToProps)(AppAvatar)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => dispatch(handleLogout())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AppAvatar)

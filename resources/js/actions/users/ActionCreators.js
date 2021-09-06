@@ -34,3 +34,10 @@ export const getInitialData = (payload) => {
     payload
   }
 }
+
+export const uploadUsers = (payload) => {
+  return {
+    type: Types.UPLOAD_USERS,
+    payload
+  }
+}

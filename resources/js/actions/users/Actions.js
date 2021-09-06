@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import { addNewUser, getAllUsers, getAuthUser, getInitialData, updateUserInfo } from './ActionCreators'
+import { addNewUser, getAllUsers, getAuthUser, getInitialData, updateUserInfo, uploadUsers } from './ActionCreators'
 
 export const handleGetAuthUser = () => (dispatch) => {
   return new Promise((resolve, reject) => {
@@ -60,6 +60,18 @@ export const handleGetInitialData = () => (dispatch) => {
   return new Promise((resolve, reject) => {
     api().get('/initial-data/').then((res) => {
       dispatch(getInitialData(res.data))
+      resolve(res)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+// Upload users in bulk
+export const handleUploadUsers = (data) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    api().post('/user/import', data).then((res) => {
+      dispatch(uploadUsers(res.data))
       resolve(res)
     }).catch((err) => {
       reject(err)
