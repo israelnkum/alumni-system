@@ -1,38 +1,24 @@
 import React from 'react'
-import { Menu } from 'antd'
-import AppSignup from '../home/signup'
-import AppSignIn from '../home/signin'
-import { Link } from 'react-router-dom'
+import { Anchor } from 'antd'
 
+const { Link } = Anchor
 const AppHeader = () => {
   return (
         <div className="container-fluid">
             <div className='header'>
-                <div className="logo">
-                    <Link to={'/'}><img className="img" src="/imgs/logo.png" alt={'Logo'}/></Link>
+                <div className="logo" >
+                    <Anchor>
+                        <Link href={'#hero'} title={<img src={'/imgs/logo.png'} width={80}/>}/>
+                    </Anchor>
                 </div>
-                <Menu mode="horizontal" defaultSelectedKeys={['home']}>
-                    <Menu.Item key="home">Home</Menu.Item>
-                    <Menu.Item key="event">Events</Menu.Item>
-                    <Menu.Item key="forum">Forum</Menu.Item>
-                    <Menu.Item key="jobs">Jobs</Menu.Item>
-                    <Menu.Item key="signUp">
-                        <a href={'/register'}>
-                            Sign Up
-                        </a>
-                    </Menu.Item>
-                    <Menu.Item key="signIn">
-                        <a href={'/login'}>
-                            Sign In
-                        </a>
-                    </Menu.Item>
-                    {/* <Menu.Item key="signUp"> */}
-                    {/*    <AppSignup/> */}
-                    {/* </Menu.Item> */}
-                    {/* <Menu.Item key="signIn"> */}
-                    {/*    <AppSignIn /> */}
-                    {/* </Menu.Item> */}
-                </Menu>
+                <Anchor>
+                    <Link href="#hero" title="Home" />
+                    <Link href="#about" title="About" />
+                    <Link href="#event" title="Event" />
+                    <Link href="#forum" title="Forum" />
+                    <Link href="#jobs" title="Jobs" />
+                    <Link href="#contact" title="Contact" />
+                </Anchor>
             </div>
         </div>
   )

@@ -6,8 +6,7 @@ import AppEvent from '../components/home/event'
 import CurrentAlumni from '../components/home/current'
 import AppForum from '../components/home/forum'
 import AppJobs from '../components/home/jobs'
-
-import AppSignin from '../components/home/signin'
+import AppContact from '../components/home/contact'
 
 const AppHome = () => {
   return (
@@ -18,7 +17,8 @@ const AppHome = () => {
             <CurrentAlumni />
             <AppForum />
             <AppJobs />
-            <AppSignin />
+            <AppContact />
+
         </div>
   )
 }

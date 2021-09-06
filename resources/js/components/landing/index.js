@@ -8,7 +8,8 @@ import AppHome from './views/home'
 import { Route, Switch } from 'react-router'
 import Forum from './components/forum'
 import Details from './components/forum/details'
-const { Header, Content } = Layout
+import AppFooter from './components/footer/footer'
+const { Header, Content, Footer } = Layout
 
 const Landing = () => {
   return (
@@ -23,6 +24,9 @@ const Landing = () => {
                     <Route exact path={'/landing/forum'} component={Forum}/>
                 </Switch>
             </Content>
+            <Footer>
+                <AppFooter />
+            </Footer>
         </Layout>
   )
 }

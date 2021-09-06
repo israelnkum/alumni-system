@@ -12,7 +12,7 @@ const AppEvent = (props) => {
     upcomingEvents()
   }, [])
   return (
-        <div className="block featureBlock bgGray">
+        <div id="event" className="block featureBlock bgGray">
             <div className="container-fluid">
                 <div className="titleHolder">
                     <h2>Upcoming Events</h2>

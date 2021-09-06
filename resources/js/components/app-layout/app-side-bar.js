@@ -34,7 +34,9 @@ const AppSideBar = (props) => {
           left: 0
         }} trigger={null} collapsible collapsed={props.collapsed}>
             <div className={'logo'} align={'center'}>
-                <img height={'auto'} width={120} alt={'Alumni System'} src={'/imgs/logo.png'}/>
+                <Link to={'/home'}>
+                    <img height={'auto'} width={120} alt={'Alumni System'} src={'/imgs/logo.png'}/>
+                </Link>
             </div>
             <Divider/>
             <Menu disabled={!authUser.passwordUpdated} theme="dark" mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} defaultSelectedKeys={['1']}>
@@ -74,11 +76,11 @@ const AppSideBar = (props) => {
                 {
                     authUser.userType === 'admin' &&
                     <Menu.SubMenu key="users" icon={<UserOutlined />} title="Users">
-                        <Menu.Item key="new-user">
+                       {/* <Menu.Item key="new-user">
                             <Link to={'/users'}>{'Alumni\'s'}</Link>
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item key="all-users">
-                            <Link to={'/users'}>Admins</Link>
+                            <Link to={'/users'}>All Users</Link>
                         </Menu.Item>
                     </Menu.SubMenu>
                 }

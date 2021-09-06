@@ -12,7 +12,7 @@ const AppJobs = (props) => {
     availableJobs()
   }, [])
   return (
-        <div className="block jobsBlock">
+        <div id="jobs" className="block jobsBlock">
             <div className="container-fluid">
                 <div className="titleHolder">
                     <h2>Available Jobs</h2>
@@ -31,7 +31,7 @@ const AppJobs = (props) => {
                                         <p>{job.location}</p>
                                         <Typography.Text>
                                             Closing Date:
-                                            {job.location}
+                                            {job.closingDate}
                                         </Typography.Text>
                                     </Card>
                                 </div>

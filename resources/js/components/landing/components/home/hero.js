@@ -1,27 +1,29 @@
 import React from 'react'
-import { Carousel, Button } from 'antd'
+import { Carousel, Button, Anchor } from 'antd'
+
+const { Link } = Anchor
 
 const items = [
   {
     key: '1',
     title: 'Takoradi Technical University Alumni',
-    content: 'Adwen, Akoma na Nsa ma Mpuntu.'
+    content: 'Adwen, Akoma na Nsa ma Mpuntu'
   },
   {
     key: '2',
-    title: 'Alumni Association of TTU',
-    content: 'Adwen, Akoma na Nsa ma Mpuntu.'
+    title: 'Alumni Association of Takoradi Technical University',
+    content: 'Service to the School'
   },
   {
     key: '3',
     title: 'Stay Connected with Other members',
-    content: 'Adwen, Akoma na Nsa ma Mpuntu.'
+    content: 'Get in touch, stay connected'
   }
 ]
 
 const AppHero = () => {
   return (
-        <div className="heroBlock">
+        <div id="hero" className="heroBlock">
             <Carousel autoplay>
                 {
                     items.map(item => {
@@ -31,8 +33,10 @@ const AppHero = () => {
                                     <h3 className="hero-title">{item.title}</h3>
                                     <p className="hero-content">{item.content}</p>
                                     <div className="btnHolder">
-                                        <Button type="primary" size="large">Learn More</Button>
-                                        <Button size="large" >Contact Us</Button>
+                                        <Anchor>
+                                            <Link href={'#about'} title={<Button type="primary" size="large">Learn More</Button>}/>
+                                            <Link href={'#contact'} title={<Button size="large">Contact Us</Button>}/>
+                                        </Anchor>
                                     </div>
                                 </div>
                             </div>

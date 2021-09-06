@@ -18,7 +18,7 @@ const AppForum = (props) => {
   }, [])
 
   return (
-        <div className="block featureBlock bgGray">
+        <div id="forum" className="block featureBlock bgGray">
             <div className="container-fluid">
                 <div className="titleHolder">
                     <h2>Forum</h2>
